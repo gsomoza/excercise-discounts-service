@@ -8,7 +8,7 @@ use Webmozart\Expression\Expression;
 /**
  * Builds Criteria based on a predefined config structure.
  */
-final class CriteriaBuilder
+class CriteriaBuilder
 {
     /**
      * @param array $criteriaConfig
