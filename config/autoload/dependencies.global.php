@@ -35,5 +35,11 @@ return [
             Middleware\ErrorResponseGenerator::class         => Container\ErrorResponseGeneratorFactory::class,
             Middleware\NotFoundHandler::class                => Container\NotFoundHandlerFactory::class,
         ],
+        'delegators' => [
+            \Zend\Expressive\Application::class => [
+                \TeamLeader\CustomerApi\Factory\FastRouteDelegator::class,
+                \TeamLeader\ProductApi\Factory\FastRouteDelegator::class,
+            ],
+        ],
     ],
 ];

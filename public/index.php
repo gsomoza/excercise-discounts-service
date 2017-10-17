@@ -20,10 +20,5 @@ call_user_func(function () {
     /** @var \Zend\Expressive\Application $app */
     $app = $container->get(\Zend\Expressive\Application::class);
 
-    // Import programmatic/declarative middleware pipeline and routing
-    // configuration statements
-    require 'config/pipeline.php';
-    require 'config/routes.php';
-
     $app->run();
 });

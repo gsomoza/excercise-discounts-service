@@ -1,19 +1,34 @@
 <?php
 
-namespace App\Action;
+namespace TeamLeader\ProductApi\Action;
 
-use Fig\Http\Message\StatusCodeInterface;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\EmptyResponse;
+use Zend\Diactoros\Response\JsonResponse;
 
 /**
- * Class PingAction
+ * GET /api/product
  */
-class PingAction implements MiddlewareInterface
+class ListProductsAction implements MiddlewareInterface
 {
+    /** @var \Traversable */
+    private $products;
+
+    /**
+     * GetCustomerAction constructor.
+     */
+    public function __construct()
+    {
+        // TODO: this is just to mock the ProductApi microservice
+        $this->products = \json_decode(
+            \file_get_contents(__DIR__ . '/../../test/fixtures/products.json'),
+            true
+        );
+    }
+
+
     /**
      * Process an incoming server request and return a response, optionally delegating
      * to the next middleware component to create the response.
@@ -25,6 +40,6 @@ class PingAction implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        return new EmptyResponse(StatusCodeInterface::STATUS_OK);
+        return new JsonResponse($this->products);
     }
 }

@@ -2,17 +2,16 @@
 
 namespace App\Action;
 
-use Fig\Http\Message\StatusCodeInterface;
 use Interop\Http\ServerMiddleware\DelegateInterface;
 use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Zend\Diactoros\Response\EmptyResponse;
+use Zend\Diactoros\Response\TextResponse;
 
 /**
- * Class PingAction
+ * Class HomeAction
  */
-class PingAction implements MiddlewareInterface
+class HomeAction implements MiddlewareInterface
 {
     /**
      * Process an incoming server request and return a response, optionally delegating
@@ -25,6 +24,8 @@ class PingAction implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, DelegateInterface $delegate)
     {
-        return new EmptyResponse(StatusCodeInterface::STATUS_OK);
+        return new TextResponse(
+            'Welcome to the TeamLeader Customer microservice. Please refer to the docs to query my API.'
+        );
     }
 }
