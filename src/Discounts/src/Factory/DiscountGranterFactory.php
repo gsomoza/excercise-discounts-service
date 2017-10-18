@@ -6,19 +6,18 @@ use Psr\Container\ContainerInterface;
 use TeamLeader\Domain\Sales\Discounts\Discount;
 use Webmozart\Assert\Assert;
 use Webmozart\Expression\Expression;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Creates discounts from config to build DiscountGranterService
  */
-final class DiscountGranterServiceFactory
+final class DiscountGranterFactory
 {
     /**
-     * @param ContainerInterface $container
+     * @param ServiceManager $container
      * @return Discount[]
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function __invoke(ContainerInterface $container)
+    public function __invoke(ServiceManager $container)
     {
         $config = $container->get('config');
 
@@ -26,12 +25,13 @@ final class DiscountGranterServiceFactory
         $discountsConfig = $config['teamleader']['domain']['sales']['discounts']['enabled'] ?? [];
 
         // in the future other types of discounts could be supported, but right now it's only this
-        $expressionDiscountFactory = $container->get(ExpressionDiscountBuilder::class);
+        /** @var ExpressionDiscountBuilder $expressionDiscountBuilder */
+        $expressionDiscountBuilder = $container->get(ExpressionDiscountBuilder::class);
 
         /** @var Discount[] $discounts */
         $discounts = \array_map(
-            function ($discountConfig) use ($expressionDiscountFactory) {
-                return $expressionDiscountFactory($discountConfig);
+            function ($discountConfig) use ($expressionDiscountBuilder) {
+                return $expressionDiscountBuilder->build($discountConfig);
             },
             $discountsConfig
         );

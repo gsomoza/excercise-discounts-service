@@ -2,10 +2,15 @@
 
 namespace TeamLeader\Domain\Sales\Discounts\Container;
 
+use TeamLeader\Domain\Sales\Discounts\Action\BuyXGetYFree;
+use TeamLeader\Domain\Sales\Discounts\Action\OrderDiscountPercent;
 use TeamLeader\Domain\Sales\Discounts\Criteria\Customer\RevenueGreaterThan;
-use TeamLeader\Domain\Sales\Discounts\Factory\DiscountGranterServiceFactory;
+use TeamLeader\Domain\Sales\Discounts\Criteria\Item\FromCategory;
+use TeamLeader\Domain\Sales\Discounts\Criteria\OrderItems;
+use TeamLeader\Domain\Sales\Discounts\Factory\DiscountGranterFactory;
 use TeamLeader\Domain\Sales\Discounts\Factory\ExpressionDiscountBuilder;
 use TeamLeader\Domain\Sales\Discounts\Service\DiscountGranterService;
+use Webmozart\Expression\Expr;
 use Webmozart\Expression\Selector\AtLeast;
 
 /**
@@ -21,7 +26,7 @@ final class ConfigProvider
                     ExpressionDiscountBuilder::class,
                 ],
                 'factories' => [
-                    DiscountGranterService::class => DiscountGranterServiceFactory::class
+                    DiscountGranterService::class => DiscountGranterFactory::class,
                 ],
             ],
             'teamleader' => [
@@ -38,26 +43,32 @@ final class ConfigProvider
 
     /**
      * Returns an array of enabled discount configurations - this could actually lazy-load from e.g. a DB
+     * TODO: refactor using \Zend\Di or similar to allow configuration-driven changes
      *
      * @return array
      */
     public function getEnabledDiscounts(): array
     {
+        $fiveOrMoreSwitches = Expr::andX([
+            new FromCategory(2),
+            Expr::key('quantity', Expr::greaterThanEqual(5)),
+        ]);
+
         return [
-            [
-                'criteria' => [
-                    'class' => RevenueGreaterThan::class,
-                    'params' => [1000.00],
+            [ // A customer who has already bought for over € 1000, gets a discount of 10% on the whole order.
+                'name' => 'Loyalty Discount',
+                'criteria' => new RevenueGreaterThan(1000.00),
+                'actions' => [
+                    new OrderDiscountPercent(10.00),
                 ],
             ],
-            [
-                'criteria' => [
-                    'class' => AtLeast::class,
-                    'params' => [
-
-                    ],
+            [ // For every product of category "Switches" (id 2), when you buy five, you get a sixth for free.
+                'name' => 'Buy 5 switches, get 1 free',
+                'criteria' => new OrderItems(Expr::atLeast(1, $fiveOrMoreSwitches)),
+                'actions' => [
+                    new BuyXGetYFree(2, 1, $fiveOrMoreSwitches),
                 ],
-            ]
+            ],
         ];
     }
 }

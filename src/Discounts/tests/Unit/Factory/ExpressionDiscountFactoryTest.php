@@ -3,9 +3,11 @@
 namespace TeamLeaderTests\Domain\Sales\Discounts\Unit\Factory;
 
 use PHPUnit\Framework\TestCase;
+use TeamLeader\Domain\Sales\Discounts\Action;
 use TeamLeader\Domain\Sales\Discounts\Criteria\Customer\RevenueGreaterThan;
 use TeamLeader\Domain\Sales\Discounts\Discount;
 use TeamLeader\Domain\Sales\Discounts\ExpressionDiscount;
+use TeamLeader\Domain\Sales\Discounts\Factory\ActionBuilder;
 use TeamLeader\Domain\Sales\Discounts\Factory\CriteriaBuilder;
 use TeamLeader\Domain\Sales\Discounts\Factory\ExpressionDiscountBuilder;
 use Webmozart\Expression\Constraint\GreaterThan;
@@ -20,16 +22,12 @@ class ExpressionDiscountFactoryTest extends TestCase
     /** @var ExpressionDiscountBuilder */
     private $factory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    private $criteriaBuilderMock;
-
     /**
      * @return void
      */
     public function setUp()
     {
-        $this->criteriaBuilderMock = $this->getMockBuilder(CriteriaBuilder::class)->getMock();
-        $this->factory = new ExpressionDiscountBuilder($this->criteriaBuilderMock);
+        $this->factory = new ExpressionDiscountBuilder();
     }
 
     /**
@@ -38,17 +36,9 @@ class ExpressionDiscountFactoryTest extends TestCase
      */
     public function test_successful_discount_creation_with_minimal_params()
     {
-        $criteriaConfig = [
-            'class' => RevenueGreaterThan::class,
-            'params' => [123.45],
-        ];
-        $this->criteriaBuilderMock
-            ->expects($this->once())
-            ->method('buildCriteria')
-            ->with($criteriaConfig)
-            ->willReturn($this->getMockBuilder(Expression::class)->getMock());
-        $result = $this->factory->newFromConfig([
-            'criteria' => $criteriaConfig,
+        $result = $this->factory->build([
+            'filterCriteria' => new RevenueGreaterThan(123.45),
+            'actions' => [$this->getMockBuilder(Action::class)->getMock()],
         ]);
 
         $this->assertIsExpressionDiscount($result);
@@ -65,7 +55,7 @@ class ExpressionDiscountFactoryTest extends TestCase
     public function test_invalid_configurations_produce_catchable_exceptions(array $config, string $exception = null)
     {
         $this->expectException($exception ?? \InvalidArgumentException::class);
-        (new ExpressionDiscountBuilder())->newFromConfig($config);
+        $this->factory->build($config);
     }
 
     /**
@@ -75,8 +65,11 @@ class ExpressionDiscountFactoryTest extends TestCase
     {
         return [
             [ [] ], // empty configuration
-            [ ['foo' => 'bar'] ], // configuration without 'criteria'
-            [ ['criteria' => 'bar'] ], // 'criteria' not array
+            [ ['foo' => 'bar'] ], // configuration without 'filterCriteria'
+            [ ['filterCriteria' => []] ], // 'actions' missing
+            [ ['actions' => []] ], // 'filterCriteria' missing
+            [ ['filterCriteria' => 'bar', 'actions' => []] ], // 'filterCriteria' not array
+            [ ['actions' => 'bar', 'filterCriteria' => []] ], // 'actions' not array
         ];
     }
 

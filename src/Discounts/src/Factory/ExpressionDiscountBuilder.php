@@ -11,28 +11,14 @@ use Webmozart\Expression\Expression;
  */
 final class ExpressionDiscountBuilder
 {
-    /** @var CriteriaBuilder */
-    private $criteriaBuilder;
-
-    /**
-     * @param CriteriaBuilder $criteriaBuilder
-     */
-    public function __construct(CriteriaBuilder $criteriaBuilder = null)
+    public function build(array $config): ExpressionDiscount
     {
-        if (null === $criteriaBuilder) {
-            $criteriaBuilder = new CriteriaBuilder();
-        }
-        $this->criteriaBuilder = $criteriaBuilder;
-    }
+        Assert::keyExists($config, 'filterCriteria');
+        Assert::isInstanceOf($config['filterCriteria'], Expression::class);
 
-    public function newFromConfig(array $discountConfig): ExpressionDiscount
-    {
-        Assert::true(!empty($discountConfig['criteria']), 'Expected key "criteria" with a non-empty array as value');
-        Assert::isArray($discountConfig['criteria']);
+        Assert::true(!empty($config['actions']), 'Expected key "actions" with a non-empty array as value');
+        Assert::isArray($config['actions']);
 
-        /** @var Expression $criteria */
-        $criteria = $this->criteriaBuilder->buildCriteria($discountConfig['criteria']);
-
-        return new ExpressionDiscount($criteria);
+        return new ExpressionDiscount($config['filterCriteria'], $config['actions']);
     }
 }

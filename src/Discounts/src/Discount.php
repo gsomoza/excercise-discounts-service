@@ -2,7 +2,7 @@
 
 namespace TeamLeader\Domain\Sales\Discounts;
 
-use TeamLeader\Domain\Sales\Discounts\Exception\DiscountDoesNotApplyToOrder;
+use TeamLeader\Domain\Sales\Discounts\Exception\CantApplyDiscountToOrder;
 
 /**
  * Represents a discount
@@ -23,7 +23,7 @@ interface Discount
      *
      * @param array $order
      * @return array
-     * @throws DiscountDoesNotApplyToOrder
+     * @throws CantApplyDiscountToOrder
      */
     public function applyToOrder(array $order): array;
 }

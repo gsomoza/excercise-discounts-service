@@ -2,7 +2,8 @@
 
 namespace TeamLeader\Domain\Sales\Discounts;
 
-use TeamLeader\Domain\Sales\Discounts\Exception\DiscountDoesNotApplyToOrder;
+use TeamLeader\Domain\Sales\Discounts\Exception\CantApplyDiscountToOrder;
+use Webmozart\Assert\Assert;
 use Webmozart\Expression\Expression;
 
 /**
@@ -13,13 +14,29 @@ final class ExpressionDiscount implements Discount
     /** @var  Expression */
     private $expression;
 
+    /** @var Action[] */
+    private $actions;
+
+    /** @var string */
+    private $name;
+
     /**
      * ExpressionDiscount constructor.
      * @param Expression $expression
+     * @param array $actions
+     * @param string|null $name
      */
-    public function __construct(Expression $expression)
+    public function __construct(Expression $expression, array $actions, string $name = null)
     {
+        Assert::allIsInstanceOf($actions, Action::class);
+        $this->actions = $actions;
+
         $this->expression = $expression;
+
+        if (null === $name) {
+            $name = $this->expression->toString();
+        }
+        $this->name = $name;
     }
 
     /**
@@ -39,17 +56,25 @@ final class ExpressionDiscount implements Discount
      *
      * @param array $order
      * @return array
-     * @throws DiscountDoesNotApplyToOrder
+     * @throws CantApplyDiscountToOrder
      */
     public function applyToOrder(array $order): array
     {
         if (!$this->canApplyToOrder($order)) {
-            throw new DiscountDoesNotApplyToOrder([$this->expression->toString()]);
+            throw new CantApplyDiscountToOrder($this->name, $order['id']);
         }
 
-        $discounts = $order['discounts'] ?? [];
-        $discounts[] = [
+        foreach ($this->actions as $action) {
+            $order = $action->apply($order);
+        }
 
+        $discounts = $order['applied_discounts'] ?? [];
+        $discounts[] = [
+            'name' => $this->name,
+            'granted' => (new \DateTime())->format('c'),
         ];
+        $order['applied_discounts'] = $discounts;
+
+        return $order;
     }
 }
