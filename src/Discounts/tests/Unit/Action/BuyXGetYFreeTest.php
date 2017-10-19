@@ -3,8 +3,10 @@
 namespace TeamLeaderTests\Domain\Sales\Discounts\Unit\Action;
 
 use PHPUnit\Framework\TestCase;
+use Spatie\Snapshots\MatchesSnapshots;
 use TeamLeader\Domain\Sales\Discounts\Action\BuyXGetYFree;
 use TeamLeader\Domain\Sales\Discounts\Criteria\Item\FromCategory;
+use TeamLeaderTests\Domain\Sales\Discounts\Fixtures\Order\OrderFixtures;
 use Webmozart\Expression\Expr;
 use Webmozart\Expression\Expression;
 
@@ -15,6 +17,9 @@ use Webmozart\Expression\Expression;
  */
 class BuyXGetYFreeTest extends TestCase
 {
+    use MatchesSnapshots;
+    use OrderFixtures;
+
     /**
      * @param int $threshold
      * @param int $qtyFree
@@ -24,13 +29,14 @@ class BuyXGetYFreeTest extends TestCase
      */
     public function test_success(string $fixture, int $threshold, int $qtyFree, Expression $filterCriteria)
     {
-        $order = \json_decode(\file_get_contents(__DIR__."/../../fixtures/order/$fixture.json"), true);
+        $order = $this->getOrderFixture($fixture);
         $instance = new BuyXGetYFree($threshold, $qtyFree, $filterCriteria);
         $result = $instance->apply($order);
 
         $this->assertCount(7, $result['items']);
         $this->assertEquals(0, \end($result['items'])['total']);
-        // TODO: maybe some more checks
+
+        $this->assertMatchesJsonSnapshot(\json_encode($result));
     }
 
     /**

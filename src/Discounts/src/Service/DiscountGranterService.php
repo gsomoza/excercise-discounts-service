@@ -10,7 +10,7 @@ use TeamLeader\Domain\Sales\Discounts\Discount;
 final class DiscountGranterService implements GrantsDiscounts
 {
     /** @var Discount[] */
-    private $available;
+    private $discounts;
 
     /**
      * Apply discounts to order data and return the update data with discount information

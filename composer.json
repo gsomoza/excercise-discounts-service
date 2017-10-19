@@ -17,6 +17,7 @@
     "php": "^7.1",
     "http-interop/http-middleware": "^0.4.1",
     "roave/security-advisories": "dev-master",
+    "spatie/phpunit-snapshot-assertions": "^1.1",
     "teamleader/sales-discount": "^1.0",
     "webmozart/assert": "^1.2",
     "zendframework/zend-component-installer": "^1.0",

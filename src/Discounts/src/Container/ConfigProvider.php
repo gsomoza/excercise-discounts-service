@@ -4,11 +4,13 @@ namespace TeamLeader\Domain\Sales\Discounts\Container;
 
 use TeamLeader\Domain\Sales\Discounts\Action\BuyXGetYFree;
 use TeamLeader\Domain\Sales\Discounts\Action\OrderDiscountPercent;
+use TeamLeader\Domain\Sales\Discounts\Action\PercentDiscountOnCheapestItem;
 use TeamLeader\Domain\Sales\Discounts\Criteria\Customer\RevenueGreaterThan;
 use TeamLeader\Domain\Sales\Discounts\Criteria\Item\FromCategory;
 use TeamLeader\Domain\Sales\Discounts\Criteria\OrderItems;
 use TeamLeader\Domain\Sales\Discounts\Factory\DiscountGranterFactory;
 use TeamLeader\Domain\Sales\Discounts\Factory\ExpressionDiscountBuilder;
+use TeamLeader\Domain\Sales\Discounts\Percentage;
 use TeamLeader\Domain\Sales\Discounts\Service\DiscountGranterService;
 use Webmozart\Expression\Expr;
 use Webmozart\Expression\Selector\AtLeast;
@@ -43,7 +45,7 @@ final class ConfigProvider
 
     /**
      * Returns an array of enabled discount configurations - this could actually lazy-load from e.g. a DB
-     * TODO: refactor using \Zend\Di or similar to allow configuration-driven changes
+     * TODO: refactor using \Zend\Di or similar to allow configuration-driven discounts
      *
      * @return array
      */
@@ -55,11 +57,11 @@ final class ConfigProvider
         ]);
 
         return [
-            [ // A customer who has already bought for over € 1000, gets a discount of 10% on the whole order.
-                'name' => 'Loyalty Discount',
-                'criteria' => new RevenueGreaterThan(1000.00),
+            [ // If you buy two or more products of category "Tools" (id 1), you get a 20% discount on the cheapest product.
+                'name' => '20% off on one of two tools',
+                'criteria' => new OrderItems(Expr::atLeast(2, new FromCategory(1))),
                 'actions' => [
-                    new OrderDiscountPercent(10.00),
+                    new PercentDiscountOnCheapestItem(new Percentage(20), new FromCategory(1)),
                 ],
             ],
             [ // For every product of category "Switches" (id 2), when you buy five, you get a sixth for free.
@@ -67,6 +69,13 @@ final class ConfigProvider
                 'criteria' => new OrderItems(Expr::atLeast(1, $fiveOrMoreSwitches)),
                 'actions' => [
                     new BuyXGetYFree(2, 1, $fiveOrMoreSwitches),
+                ],
+            ],
+            [ // A customer who has already bought for over € 1000, gets a discount of 10% on the whole order.
+                'name' => 'Loyalty Discount',
+                'criteria' => new RevenueGreaterThan(1000.00),
+                'actions' => [
+                    new OrderDiscountPercent(0.1),
                 ],
             ],
         ];
