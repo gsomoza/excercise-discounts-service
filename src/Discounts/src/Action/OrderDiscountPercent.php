@@ -3,22 +3,23 @@
 namespace TeamLeader\Domain\Sales\Discounts\Action;
 
 use TeamLeader\Domain\Sales\Discounts\Action;
+use TeamLeader\Domain\Sales\Discounts\Percentage;
 
 /**
  * Grants a percentage discount over the entire order
  */
 class OrderDiscountPercent implements Action
 {
-    /** @var float */
-    private $amount;
+    /** @var Percentage */
+    private $discount;
 
     /**
      * OrderDiscountPercent constructor.
-     * @param float $amount The percentage amount. For 50% use 0,5.
+     * @param Percentage $discount The discount percentage to apply
      */
-    public function __construct(float $amount)
+    public function __construct(Percentage $discount)
     {
-        $this->amount = $amount;
+        $this->discount = $discount;
     }
 
     /**
@@ -28,9 +29,9 @@ class OrderDiscountPercent implements Action
     public function apply(array $order): array
     {
         $oldTotal = \floatval($order['total']);
-        $newTotal = \min($oldTotal - $oldTotal * $this->amount, 0);
+        $newTotal = $this->discount->off($oldTotal);
         
-        $order['total'] = \sprintf('%0.2f', $newTotal);
+        $order['total'] = \number_format($newTotal, 2);
 
         return $order;
     }

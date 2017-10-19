@@ -8,7 +8,7 @@ use Webmozart\Expression\Expr;
 use Webmozart\Expression\Expression;
 
 /**
- * Applies a predefined discount amount on the cheapest item in the given collection, after filtering it with criteria.
+ * Applies a predefined discount discount on the cheapest item in the given collection, after filtering it with criteria.
  * IMPORTANT: this action must be applied BEFORE any actions that apply discounts at the order level.
  */
 class PercentDiscountOnCheapestItem implements Action
@@ -62,8 +62,8 @@ class PercentDiscountOnCheapestItem implements Action
         $discountedItemTotal = $this->discount->off($itemTotal);
         $orderTotal += $discountedItemTotal; // add it back in after updating
 
-        $cheapest['total'] = (string) $discountedItemTotal;
-        $cheapest['discounts'][$this->discount->toString()] = $this->discount->of($itemTotal);
+        $cheapest['total'] = \number_format($discountedItemTotal, 2);
+        $cheapest['discounts'][] = \number_format($this->discount->of($itemTotal), 2);
 
         // remove the old item
         unset($order['items'][$cheapestKey]);
@@ -71,7 +71,7 @@ class PercentDiscountOnCheapestItem implements Action
         $order['items'][] = $cheapest;
 
         // update the order total
-        $order['total'] = $orderTotal;
+        $order['total'] = (string) \number_format($orderTotal, 2);
 
         return $order;
     }

@@ -15,7 +15,7 @@ class Percentage
     private $fraction;
 
     /**
-     * @param float $percentage The percentage amount (e.g. 20 for 20%)
+     * @param float $percentage The percentage discount (e.g. 20 for 20%)
      */
     public function __construct(float $percentage)
     {

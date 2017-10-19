@@ -73,9 +73,9 @@ final class ConfigProvider
             ],
             [ // A customer who has already bought for over € 1000, gets a discount of 10% on the whole order.
                 'name' => 'Loyalty Discount',
-                'criteria' => new RevenueGreaterThan(1000.00),
+                'criteria' => new RevenueGreaterThan(1000),
                 'actions' => [
-                    new OrderDiscountPercent(0.1),
+                    new OrderDiscountPercent(new Percentage(10)),
                 ],
             ],
         ];

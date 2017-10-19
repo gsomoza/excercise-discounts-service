@@ -13,12 +13,12 @@ final class ExpressionDiscountBuilder
 {
     public function build(array $config): ExpressionDiscount
     {
-        Assert::keyExists($config, 'filterCriteria');
-        Assert::isInstanceOf($config['filterCriteria'], Expression::class);
+        Assert::keyExists($config, 'criteria');
+        Assert::isInstanceOf($config['criteria'], Expression::class);
 
         Assert::true(!empty($config['actions']), 'Expected key "actions" with a non-empty array as value');
         Assert::isArray($config['actions']);
 
-        return new ExpressionDiscount($config['filterCriteria'], $config['actions']);
+        return new ExpressionDiscount($config['criteria'], $config['actions']);
     }
 }

@@ -22,12 +22,12 @@
             "unit-price": "10",
             "total": "50.00"
         },
-        "3": {
-            "product-id": "A102",
-            "category": "1",
-            "quantity": "1",
-            "unit-price": "49.50",
-            "total": "49.50"
+        "2": {
+            "product-id": "A101b",
+            "category": "2",
+            "quantity": "4",
+            "unit-price": "10",
+            "total": "40.00"
         },
         "4": {
             "product-id": "A103",
@@ -44,15 +44,24 @@
             "total": "250.00"
         },
         "6": {
-            "product-id": "A101b",
-            "category": "2",
-            "quantity": "4",
-            "unit-price": "10",
-            "total": "33.91",
+            "product-id": "A102",
+            "category": "1",
+            "quantity": "1",
+            "unit-price": "49.50",
+            "total": "39.60",
             "discounts": [
-                "6.09"
+                "9.90"
+            ]
+        },
+        "7": {
+            "product-id": "A101",
+            "quantity": "2",
+            "unit-price": "10.00",
+            "total": "0.00",
+            "discounts": [
+                "10.00"
             ]
         }
     },
-    "total": "502.90"
+    "total": "449.18"
 }

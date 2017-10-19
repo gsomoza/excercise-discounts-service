@@ -1,45 +1,58 @@
 {
     "id": "3",
     "customer-id": "3",
+    "customer": {
+        "id": "2",
+        "name": "Teamleader",
+        "since": "2015-01-15",
+        "revenue": "1505.95"
+    },
     "items": {
         "1": {
             "product-id": "A101",
-            "category": "3",
-            "quantity": "9",
+            "category": "2",
+            "quantity": "5",
             "unit-price": "10",
-            "total": "90.00"
+            "total": "50.00"
         },
         "2": {
-            "product-id": "A102",
+            "product-id": "A101b",
             "category": "2",
+            "quantity": "4",
+            "unit-price": "10",
+            "total": "40.00"
+        },
+        "3": {
+            "product-id": "A102",
+            "category": "1",
             "quantity": "1",
             "unit-price": "49.50",
             "total": "49.50"
         },
-        "3": {
+        "4": {
             "product-id": "A103",
-            "category": "2",
+            "category": "1",
             "quantity": "3",
             "unit-price": "33.33",
             "total": "99.99"
         },
-        "4": {
+        "5": {
             "product-id": "A104",
-            "category": "2",
+            "category": "1",
             "quantity": "5",
             "unit-price": "50.00",
             "total": "250.00"
         },
-        "5": {
+        "6": {
             "product-id": "A100",
             "category": "3",
             "quantity": "2",
             "unit-price": "9.75",
-            "total": "16.53015",
-            "discounts": {
-                "15.23%": 2.9698499999999997
-            }
+            "total": "16.53",
+            "discounts": [
+                "2.97"
+            ]
         }
     },
-    "total": 506.02015
+    "total": "506.02"
 }

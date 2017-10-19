@@ -33,7 +33,7 @@ class BuyXGetYFreeTest extends TestCase
         $instance = new BuyXGetYFree($threshold, $qtyFree, $filterCriteria);
         $result = $instance->apply($order);
 
-        $this->assertCount(7, $result['items']);
+        $this->assertCount(8, $result['items']);
         $this->assertEquals(0, \end($result['items'])['total']);
 
         $this->assertMatchesJsonSnapshot(\json_encode($result));

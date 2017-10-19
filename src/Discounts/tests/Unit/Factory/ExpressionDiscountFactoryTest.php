@@ -37,7 +37,7 @@ class ExpressionDiscountFactoryTest extends TestCase
     public function test_successful_discount_creation_with_minimal_params()
     {
         $result = $this->factory->build([
-            'filterCriteria' => new RevenueGreaterThan(123.45),
+            'criteria' => new RevenueGreaterThan(123.45),
             'actions' => [$this->getMockBuilder(Action::class)->getMock()],
         ]);
 
@@ -66,10 +66,10 @@ class ExpressionDiscountFactoryTest extends TestCase
         return [
             [ [] ], // empty configuration
             [ ['foo' => 'bar'] ], // configuration without 'filterCriteria'
-            [ ['filterCriteria' => []] ], // 'actions' missing
+            [ ['criteria' => []] ], // 'actions' missing
             [ ['actions' => []] ], // 'filterCriteria' missing
-            [ ['filterCriteria' => 'bar', 'actions' => []] ], // 'filterCriteria' not array
-            [ ['actions' => 'bar', 'filterCriteria' => []] ], // 'actions' not array
+            [ ['criteria' => 'bar', 'actions' => []] ], // 'filterCriteria' not array
+            [ ['actions' => 'bar', 'criteria' => []] ], // 'actions' not array
         ];
     }
 

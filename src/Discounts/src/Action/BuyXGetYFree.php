@@ -47,11 +47,16 @@ class BuyXGetYFree implements Action
            $qty = $item['quantity'];
            $toAdd = \floor($qty / $this->threshold) * $this->qtyFree;
            if ($toAdd > 0) {
+               $unitPrice = \floatval($item['unit-price']);
+               $discount = \max($unitPrice, 0); // make sure we don't grant a negative discount (that's a charge!)
                $order['items'][] = [ // new line items with the free products
                    'product-id' => $item['product-id'],
                    'quantity' => "$toAdd",
-                   'unit-price' => '0.00',
-                   'total' => '0.00'
+                   'unit-price' => \number_format($unitPrice, 2),
+                   'total' => '0.00',
+                   'discounts' => [
+                       \number_format($discount, 2),
+                   ],
                ];
            }
         }
