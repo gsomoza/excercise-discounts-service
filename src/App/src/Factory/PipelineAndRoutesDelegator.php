@@ -10,6 +10,7 @@ use Zend\Expressive\Helper\UrlHelperMiddleware;
 use Zend\Expressive\Middleware\ImplicitHeadMiddleware;
 use Zend\Expressive\Middleware\ImplicitOptionsMiddleware;
 use Zend\Expressive\Middleware\NotFoundHandler;
+use Zend\ProblemDetails\ProblemDetailsMiddleware;
 use Zend\Stratigility\Middleware\ErrorHandler;
 
 class PipelineAndRoutesDelegator
@@ -32,6 +33,7 @@ class PipelineAndRoutesDelegator
         $app->pipe(ImplicitHeadMiddleware::class);
         $app->pipe(ImplicitOptionsMiddleware::class);
         $app->pipe(UrlHelperMiddleware::class);
+        $app->pipe(ProblemDetailsMiddleware::class);
         $app->pipeDispatchMiddleware();
         $app->pipe(NotFoundHandler::class);
 

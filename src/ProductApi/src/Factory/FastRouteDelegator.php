@@ -32,7 +32,7 @@ class FastRouteDelegator implements DelegatorFactoryInterface
         /** @var \Zend\Expressive\Application $app */
         $app = $callback();
 
-        $app->route('/api/product', Action\ListProductsAction::class);
+        $app->route('/api/products', Action\ListProductsAction::class, ['GET']);
 
         return $app;
     }

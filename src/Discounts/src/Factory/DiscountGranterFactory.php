@@ -4,6 +4,7 @@ namespace TeamLeader\Domain\Sales\Discounts\Factory;
 
 use Psr\Container\ContainerInterface;
 use TeamLeader\Domain\Sales\Discounts\Discount;
+use TeamLeader\Domain\Sales\Discounts\Service\DiscountGranterService;
 use Webmozart\Assert\Assert;
 use Webmozart\Expression\Expression;
 use Zend\ServiceManager\ServiceManager;
@@ -15,7 +16,7 @@ final class DiscountGranterFactory
 {
     /**
      * @param ServiceManager $container
-     * @return Discount[]
+     * @return DiscountGranterService
      */
     public function __invoke(ServiceManager $container)
     {
@@ -36,6 +37,6 @@ final class DiscountGranterFactory
             $discountsConfig
         );
 
-        return $discounts;
+        return new DiscountGranterService($discounts);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace TeamLeader\CustomerApi\Factory;
+namespace TeamLeader\DiscountsApi\Factory;
 
-use TeamLeader\CustomerApi\Action;
+use TeamLeader\DiscountsApi\Action;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -10,10 +10,13 @@ use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\DelegatorFactoryInterface;
 
 /**
- * Creates this module's routes for the FastRoute router
+ * Class FastRouteDelegator
+ *
+ * @author Gabriel Somoza <gabriel@strategery.io>
  */
 class FastRouteDelegator implements DelegatorFactoryInterface
 {
+
     /**
      * A factory that creates delegates of a given service
      *
@@ -32,7 +35,7 @@ class FastRouteDelegator implements DelegatorFactoryInterface
         /** @var \Zend\Expressive\Application $app */
         $app = $callback();
 
-        $app->route('/api/customers/{id:\d+}', Action\GetCustomerAction::class, ['GET']);
+        $app->route('/api/discounts/grant', Action\GrantAction::class, ['POST']);
 
         return $app;
     }

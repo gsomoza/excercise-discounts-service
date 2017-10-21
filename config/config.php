@@ -14,10 +14,15 @@ $aggregator = new ConfigAggregator([
     // Include cache configuration
     new ArrayProvider($cacheConfig),
 
+    // Third-party module config
+    \Zend\ProblemDetails\ConfigProvider::class,
+
     // Default App module config
     \App\ConfigProvider::class,
     \TeamLeader\CustomerApi\ConfigProvider::class,
     \TeamLeader\ProductApi\ConfigProvider::class,
+    \TeamLeader\DiscountsApi\ConfigProvider::class,
+    \TeamLeader\Domain\Sales\Discounts\Container\ConfigProvider::class,
 
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):
