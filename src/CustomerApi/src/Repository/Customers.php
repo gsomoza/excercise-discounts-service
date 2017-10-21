@@ -43,6 +43,6 @@ final class Customers
         $body = $response->getBody()->getContents();
         Assert::notEmpty($body);
 
-        return Json::decode($body);
+        return Json::decode($body, Json::TYPE_ARRAY);
     }
 }

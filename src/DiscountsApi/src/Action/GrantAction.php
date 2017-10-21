@@ -95,7 +95,7 @@ class GrantAction implements MiddlewareInterface
         $idsToProcess = \array_map(
             function(array $item) {
                 Assert::keyExists($item, 'product-id');
-                Assert::integerish($item['product-id']);
+                Assert::stringNotEmpty($item['product-id']);
                 return $item['product-id'];
             },
             \array_filter($items, function(array $item) {

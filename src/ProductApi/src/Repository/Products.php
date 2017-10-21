@@ -32,17 +32,26 @@ final class Products
      */
     public function findByIds(array $ids): array
     {
-        Assert::allIntegerish($ids);
+        Assert::allStringNotEmpty($ids);
 
         $response = $this->api->request('GET', '/api/products');
         Assert::eq($response->getStatusCode(), 200);
 
         $body = $response->getBody()->getContents();
         Assert::notEmpty($body);
-        $products = Json::decode($body, Json::TYPE_ARRAY);
 
-        return \array_filter($products, function (array $product) use ($ids) {
-            return \in_array($product['id'], $ids);
-        });
+        $products = \array_filter(
+            Json::decode($body, Json::TYPE_ARRAY),
+            function (array $product) use ($ids) {
+                return \in_array($product['id'], $ids);
+            }
+        );
+
+        $result = [];
+        foreach ($products as $product) {
+            $result[$product['id']] = $product;
+        }
+
+        return $result;
     }
 }

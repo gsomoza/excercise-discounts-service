@@ -13,6 +13,6 @@ final class FromCategory extends Key
 {
     public function __construct(int $categoryId)
     {
-        parent::__construct('category', Expr::equals($categoryId));
+        parent::__construct('product', Expr::key('category', Expr::equals($categoryId)));
     }
 }
