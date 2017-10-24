@@ -28,7 +28,12 @@ class DiscountGranterServiceTest extends TestCase
         $originalOrder = $this->getOrderFixture('expanded1');
 
         $updatedOrder = $service->grantOnOrder($originalOrder);
-        unset($updatedOrder['applied_discounts']); // because this has variable data (e.g. timestamps)
+
+        // clean up variable data (e.g. timestamps) that won't work with snapthos
+        foreach ($updatedOrder['discounts_applied'] as $key => $val) {
+            $this->assertNotEmpty($val['granted']);
+            unset($updatedOrder['discounts_applied'][$key]['granted']);
+        }
 
         $this->assertMatchesJsonSnapshot(\json_encode($updatedOrder, JSON_PRETTY_PRINT));
     }

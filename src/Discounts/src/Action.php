@@ -5,7 +5,7 @@ namespace TeamLeader\Domain\Sales\Discounts;
 /**
  * An action that can be performed on an order once a discount can be granted
  */
-interface Action
+interface Action extends \JsonSerializable
 {
     /**
      * @param array $order

@@ -48,19 +48,34 @@ class BuyXGetYFree implements Action
            $toAdd = \floor($qty / $this->threshold) * $this->qtyFree;
            if ($toAdd > 0) {
                $unitPrice = \floatval($item['unit-price']);
-               $discount = \max($unitPrice, 0); // make sure we don't grant a negative discount (that's a charge!)
+               // make sure we don't grant a negative discount (that's a charge!)
+               $discount = \max($unitPrice, 0) * $toAdd;
+
                $order['items'][] = [ // new line items with the free products
                    'product-id' => $item['product-id'],
                    'quantity' => "$toAdd",
                    'unit-price' => \number_format($unitPrice, 2),
                    'total' => '0.00',
                    'discounts' => [
-                       \number_format($discount, 2),
+                       \array_merge(
+                           $this->jsonSerialize(),
+                           ['discounted_amount' => \number_format($discount, 2)]
+                       ),
                    ],
                ];
            }
         }
 
         return $order;
+    }
+
+    /**
+     * TODO: make this output configurable too
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'description' => 'Buy ' . $this->threshold . ' get ' . $this->qtyFree . ' free.',
+        ];
     }
 }

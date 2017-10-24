@@ -38,8 +38,14 @@ class GrantAction implements MiddlewareInterface
     }
 
     /**
-     * Process an incoming server request and return a response, optionally delegating
-     * to the next middleware component to create the response.
+     * This endpoint is in charge of "enriching" the incoming data by querying other microservices for additional data
+     * (e.g. customer data), before the data is sent to the domain model for processing discounts.
+     *
+     * Ideally the data would already come enriched in the request. In fact this code has already been designed to be
+     * forward-compatible with that idea.
+     *
+     * If that's no possible/advisable, then another option is to separate the data enrichment process away from this
+     * action and into a more generic library for potential re-use by other microservices.
      *
      * @param ServerRequestInterface $request
      * @param DelegateInterface $delegate
@@ -75,7 +81,7 @@ class GrantAction implements MiddlewareInterface
             return new JsonResponse($json);
 
         } catch (GuzzleException $e) {
-            // TODO: log it somewhere
+            // TODO: log it somewhere (e.g. Monolog)
             throw new \RuntimeException('Could not communicate with the Products API', 500, $e);
         } catch (\InvalidArgumentException $e) {
             // TODO: log it somewhere
@@ -84,7 +90,6 @@ class GrantAction implements MiddlewareInterface
     }
 
     /**
-     * TODO: this does not quite belong in a controller, move to the model or a service
      * @param array $items
      * @return array
      * @throws GuzzleException

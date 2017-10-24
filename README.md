@@ -1,138 +1,62 @@
-# Expressive Skeleton and Installer
+# Discounts Microservice
 
-[![Build Status](https://secure.travis-ci.org/zendframework/zend-expressive-skeleton.svg?branch=master)](https://secure.travis-ci.org/zendframework/zend-expressive-skeleton)
-[![Coverage Status](https://coveralls.io/repos/github/zendframework/zend-expressive-skeleton/badge.svg?branch=master)](https://coveralls.io/github/zendframework/zend-expressive-skeleton?branch=master)
-
-*Begin developing PSR-7 middleware applications in seconds!*
-
-[zend-expressive](https://github.com/zendframework/zend-expressive) builds on
-[zend-stratigility](https://github.com/zendframework/zend-stratigility) to
-provide a minimalist PSR-7 middleware framework for PHP with routing, DI
-container, optional templating, and optional error handling capabilities.
-
-This installer will setup a skeleton application based on zend-expressive by
-choosing optional packages based on user input as demonstrated in the following
-screenshot:
-
-![screenshot-installer](https://cloud.githubusercontent.com/assets/459648/10410494/16bdc674-6f6d-11e5-8190-3c1466e93361.png)
-
-The user selected packages are saved into `composer.json` so that everyone else
-working on the project have the same packages installed. Configuration files and
-templates are prepared for first use. The installer command is removed from
-`composer.json` after setup succeeded, and all installer related files are
-removed.
+A microservice that grants discounts to orders based on configurable rules.
 
 ## Getting Started
 
-Start your new Expressive project with composer:
+1. Install and configure the microservice
+2. Run it on a server
+3. Query with order data
+4. Receive back order data with discounts applied
 
-```bash
-$ composer create-project zendframework/zend-expressive-skeleton <project-path>
-```
+### Installation
 
-After choosing and installing the packages you want, go to the
-`<project-path>` and start PHP's built-in web server to verify installation:
+Installation instructions are for Production. Adjust for Development where needed.
+ 
+1. Check out the project
+2. `composer install -o --no-dev --prefer-dist`
+3. Inside `config/autoload`, copy `local.php.dist` to `local.php` and update settings. 
+4. In that file, the `base_uri` for `\App\ApiClient::class` should point to the internal API Gateway URL (assuming the 
+other API modules are segregated into their own microservices).
 
-```bash
-$ composer run --timeout=0 serve
-```
+### Running (development)
 
-You can then browse to http://localhost:8080.
+You can run the microservice with Docker by simply running `docker-compose`:
 
-> ### Setting a timeout
->
-> Composer commands time out after 300 seconds (5 minutes). On Linux-based
-> systems, the `php -S` command that `composer serve` spawns continues running
-> as a background process, but on other systems halts when the timeout occurs.
->
-> As such, we recommend running the `serve` script using a timeout. This can
-> be done by using `composer run` to execute the `serve` script, with a
-> `--timeout` option. When set to `0`, as in the previous example, no timeout
-> will be used, and it will run until you cancel the process (usually via
-> `Ctrl-C`). Alternately, you can specify a finite timeout; as an example,
-> the following will extend the timeout to a full day:
->
-> ```bash
-> $ composer run --timeout=86400 serve
-> ```
+`docker-compose up -d && docker-composer logs -f`
 
-## Troubleshooting
+The microservice will be available at `localhost:8080`.
 
-If the installer fails during the ``composer create-project`` phase, please go
-through the following list before opening a new issue. Most issues we have seen
-so far can be solved by `self-update` and `clear-cache`.
+### Querying
 
-1. Be sure to work with the latest version of composer by running `composer self-update`.
-2. Try clearing Composer's cache by running `composer clear-cache`.
+A [Paw](https://paw.cloud) project has been included in `tests/api.paw`. You can use that project to see what's 
+possible on the API and test some queries.
 
-If neither of the above help, you might face more serious issues:
+## API
 
-- Info about the [zlib_decode error](https://github.com/composer/composer/issues/4121).
-- Info and solutions for [composer degraded mode](https://getcomposer.org/doc/articles/troubleshooting.md#degraded-mode).
+This microservice exposes a REST+RPC API, with JSON. With more time (and few BC breaks), it can be upgraded to use a 
+more robust REST framework such as [JSON API](http://jsonapi.org/) or [HAL](http://stateless.co/hal_specification.html).
 
-## Application Development Mode Tool
+### Structure
+There are several modules that provide API endpoints in this project. Each module provides their own, so it should be 
+easy to remove them and put them in their own microservices.
 
-This skeleton comes with [zf-development-mode](https://github.com/zfcampus/zf-development-mode). 
-It provides a composer script to allow you to enable and disable development mode.
+In fact, this project can be used as a template for other microservices by extracting all modules except the "App" 
+module. Each microservice could then install itself on top of this template via Composer.
 
-### To enable development mode
+Modules are located in `./src`. 
+* `App`: provides basic support for the microservice. Modules that end in `Api` are modules that provide API endpoints.
+* `*Api`: each of these modules expose their API endpoints. See their `README.md` for details.
+* `Discounts`: a domain model for discounts. For simplicy, it doesn't follow any specific methodologies (e.g. DDD). 
+It's also the only module with an explicit `composer.json`, because it DEFINITELY belongs outside of this project.
 
-**Note:** Do NOT run development mode on your production server!
+### Endpoints
+See the `README.md` on each module for endpoint docs.
 
-```bash
-$ composer development-enable
-```
+### Swagger
+In the future the API documentation could be automatically published in [Swagger](https://swagger.io/) format. For an 
+example of how that would work, copy the contents of `./tests/swagger.json` and paste them in 
+[editor.swagger.io](https://editor.swagger.io/)
 
-**Note:** Enabling development mode will also clear your configuration cache, to 
-allow safely updating dependencies and ensuring any new configuration is picked 
-up by your application.
-
-### To disable development mode
-
-```bash
-$ composer development-disable
-```
-
-### Development mode status
-
-```bash
-$ composer development-status
-```
-
-## Configuration caching
-
-By default, the skeleton will create a configuration cache in
-`data/config-cache.php`. When in development mode, the configuration cache is
-disabled, and switching in and out of development mode will remove the
-configuration cache.
-
-You may need to clear the configuration cache in production when deploying if
-you deploy to the same directory. You may do so using the following:
-
-```bash
-$ composer clear-config-cache
-```
-
-You may also change the location of the configuration cache itself by editing
-the `config/config.php` file and changing the `config_cache_path` entry of the
-local `$cacheConfig` variable.
-
-## Skeleton Development
-
-This section applies only if you cloned this repo with `git clone`, not when you
-installed expressive with `composer create-project ...`.
-
-If you want to run tests against the installer, you need to clone this repo and
-setup all dependencies with composer.  Make sure you **prevent composer running
-scripts** with `--no-scripts`, otherwise it will remove the installer and all
-tests.
-
-```bash
-$ composer update --no-scripts
-$ composer test
-```
-
-Please note that the installer tests remove installed config files and templates
-before and after running the tests.
-
-Before contributing read [the contributing guide](CONTRIBUTING.md).
+## TODO
+There are many TODO's in the code indicating possible future improvements or things that were deliberately left undone.

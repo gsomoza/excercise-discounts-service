@@ -45,7 +45,7 @@ final class ConfigProvider
 
     /**
      * Returns an array of enabled discount configurations - this could actually lazy-load from e.g. a DB
-     * TODO: refactor using \Zend\Di or similar to allow configuration-driven discounts
+     * TODO: refactor using \Zend\Di or similar to allow configuration-driven discounts more easily
      *
      * @return array
      */
@@ -68,7 +68,7 @@ final class ConfigProvider
                 'name' => 'Buy 5 switches, get 1 free',
                 'criteria' => new OrderItems(Expr::atLeast(1, $fiveOrMoreSwitches)),
                 'actions' => [
-                    new BuyXGetYFree(2, 1, $fiveOrMoreSwitches),
+                    new BuyXGetYFree(5, 1, $fiveOrMoreSwitches),
                 ],
             ],
             [ // A customer who has already bought for over € 1000, gets a discount of 10% on the whole order.

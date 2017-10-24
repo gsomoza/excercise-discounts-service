@@ -20,3 +20,11 @@ If you're using FastRoute, you can auto-wire routes by adding `FastRouteDelegato
 ```
 
 If you're using a different router you'll have to set up routes manually – you can use the delagator as a template.
+
+## API
+
+### GET /api/products
+
+Responses:
+* `200` (OK): all available product data in `JSON` format (array of objects).
+* `500` (Server Error)

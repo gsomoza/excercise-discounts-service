@@ -19,6 +19,6 @@ final class ExpressionDiscountBuilder
         Assert::true(!empty($config['actions']), 'Expected key "actions" with a non-empty array as value');
         Assert::isArray($config['actions']);
 
-        return new ExpressionDiscount($config['criteria'], $config['actions']);
+        return new ExpressionDiscount($config['criteria'], $config['actions'], $config['name'] ?? null);
     }
 }

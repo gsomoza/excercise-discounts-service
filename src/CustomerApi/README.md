@@ -20,3 +20,14 @@ If you're using FastRoute, you can auto-wire routes by adding `FastRouteDelegato
 ```
 
 If you're using a different router you'll have to set up routes manually – you can use the delagator as a template.
+
+## API
+
+### GET /api/customers/:id
+
+Parameter `id` is expected to be an integer.
+
+Responses:
+* `200` (OK): customer data in `JSON` format.
+* `404` (Not Found): with empty body.
+* `500` (Server Error)

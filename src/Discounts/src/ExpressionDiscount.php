@@ -68,12 +68,14 @@ final class ExpressionDiscount implements Discount
             $order = $action->apply($order);
         }
 
-        $discounts = $order['applied_discounts'] ?? [];
+        $discounts = $order['discounts_applied'] ?? [];
         $discounts[] = [
             'name' => $this->name,
+            'condition' => $this->expression->toString(),
+            'actions' => $this->actions,
             'granted' => (new \DateTime())->format('c'),
         ];
-        $order['applied_discounts'] = $discounts;
+        $order['discounts_applied'] = $discounts;
 
         return $order;
     }

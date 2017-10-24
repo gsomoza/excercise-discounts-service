@@ -1,0 +1,82 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "TeamLeader Discounts",
+    "description": "This document was generated from the branch master.\n\nIf you are a contributor to this project, you may access it here: https://paw.cloud/account/teams/35899/projects/17955",
+    "version": "v0.0.0",
+    "contact": {
+      "name": "gabriel@strategery.io",
+      "url": "https://paw.cloud/account/teams/35899"
+    }
+  },
+  "host": "localhost:8080",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/api",
+  "paths": {
+    "/customers/{id}": {
+      "get": {
+        "summary": "Get Customer",
+        "description": "Retrieves customer information by the given customer ID.",
+        "operationId": "85a40d85-7d2a-407e-aa01-2140117d9069",
+        "responses": {
+          "default": {
+            "description": "no response description was provided for this operation"
+          }
+        },
+        "parameters": [
+          {
+            "type": "string",
+            "pattern": "\\d+",
+            "default": "2",
+            "name": "id",
+            "description": "ID of the customer.",
+            "required": true,
+            "in": "path"
+          }
+        ]
+      }
+    },
+    "/products": {
+      "get": {
+        "summary": "Get Products List",
+        "description": "Returns a list of all available products.",
+        "operationId": "0d105eec-7045-4d38-a9f0-f8801acd3c0c",
+        "responses": {
+          "default": {
+            "description": "no response description was provided for this operation"
+          }
+        },
+        "parameters": []
+      }
+    },
+    "/discounts/grant": {
+      "post": {
+        "summary": "Grant Discounts",
+        "description": "RPC endpoint that processes incoming order data by adding discounts to it on both product- and order-level and \nthen returns the result.\n\n#### Input\nStandard structure ordered data. Instead of `customer-id` and `product-id`, structured `customer` and `product` data may be supplied, respectively.  \n\n#### Output\n\nIn the case of success, whether or not discounts were applied, the output will include complete `customer` and \n`product` data (for each order item), in addition to the original input data (potentially modified by discounts). \n\nAdditional information on discount operations may optionally be supplied for each \norder item under the `discounts` key. All discounts applied will also be recorded into the order's top-level \n`discounts_applied` array.",
+        "operationId": "f623e33a-0fd1-468f-95c5-ca5635d43099",
+        "consumes": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "{\n  \"id\": \"3\",\n  \"customer-id\": \"2\",\n  \"items\": [\n    {\n      \"product-id\": \"A101\",\n      \"quantity\": \"2\",\n      \"unit-price\": \"9.75\",\n      \"total\": \"19.50\"\n    },\n    {\n      \"product-id\": \"B101\",\n      \"quantity\": \"5\",\n      \"unit-price\": \"4.99\",\n      \"total\": \"24.95\"\n    },\n    {\n      \"product-id\": \"B102\",\n      \"quantity\": \"4\",\n      \"unit-price\": \"4.99\",\n      \"total\": \"19.96\"\n    },\n    {\n      \"product-id\": \"A102\",\n      \"quantity\": \"1\",\n      \"unit-price\": \"49.50\",\n      \"total\": \"49.50\"\n    },\n    {\n      \"product-id\": \"A103\",\n      \"quantity\": \"3\",\n      \"unit-price\": \"33.33\",\n      \"total\": \"99.99\"\n    },\n    {\n      \"product-id\": \"A104\",\n      \"quantity\": \"5\",\n      \"unit-price\": \"50.00\",\n      \"total\": \"250.00\"\n    }\n  ],\n  \"total\": \"508.99\"\n}"
+            },
+            "in": "body",
+            "name": "body"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "no response description was provided for this operation"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

@@ -63,16 +63,27 @@ class PercentDiscountOnCheapestItem implements Action
         $orderTotal += $discountedItemTotal; // add it back in after updating
 
         $cheapest['total'] = \number_format($discountedItemTotal, 2);
-        $cheapest['discounts'][] = \number_format($this->discount->of($itemTotal), 2);
+        $cheapest['discounts'][] = \array_merge(
+            $this->jsonSerialize(),
+            ['discounted_amount' => \number_format($this->discount->of($itemTotal), 2)]
+        );
 
-        // remove the old item
-        unset($order['items'][$cheapestKey]);
-        // add the updated version of it
-        $order['items'][] = $cheapest;
+        $order['items'][$cheapestKey] = $cheapest;
 
         // update the order total
         $order['total'] = (string) \number_format($orderTotal, 2);
 
         return $order;
+    }
+
+    /**
+     * TODO: make this output configurable too
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'description' => $this->discount->toString() . ' discount on cheapest item in filtered set',
+            'filter' => $this->filter->toString(),
+        ];
     }
 }

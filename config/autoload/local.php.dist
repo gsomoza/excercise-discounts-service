@@ -7,5 +7,11 @@
  * `local.php` is ignored by git and safe to use for local and sensitive data like usernames and passwords.
  */
 
+use Zend\ConfigAggregator\ConfigAggregator;
+
 return [
+    ConfigAggregator::ENABLE_CACHE => false,
+    \App\ApiClient::class => [
+        'base_uri' => 'http://172.99.99.99:8080/'
+    ],
 ];

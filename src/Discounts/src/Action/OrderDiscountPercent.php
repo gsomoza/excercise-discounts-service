@@ -35,4 +35,14 @@ class OrderDiscountPercent implements Action
 
         return $order;
     }
+
+    /**
+     * TODO: make this output configurable too
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'description' => 'Discount of ' . $this->discount->toString() . ' on entire order',
+        ];
+    }
 }
