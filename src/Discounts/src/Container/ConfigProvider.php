@@ -57,7 +57,7 @@ final class ConfigProvider
         ]);
 
         return [
-            [ // If you buy two or more products of category "Tools" (id 1), you get a 20% discount on the cheapest product.
+            [ // Buy two or more products of category "Tools" (id 1) to get a 20% discount on the cheapest product.
                 'name' => '20% off on one of two tools',
                 'criteria' => new OrderItems(Expr::atLeast(2, new FromCategory(1))),
                 'actions' => [

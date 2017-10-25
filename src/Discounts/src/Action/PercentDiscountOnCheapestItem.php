@@ -8,7 +8,9 @@ use Webmozart\Expression\Expr;
 use Webmozart\Expression\Expression;
 
 /**
- * Applies a predefined discount discount on the cheapest item in the given collection, after filtering it with criteria.
+ * Applies a predefined discount discount on the cheapest item in the given collection, after filtering it with
+ * criteria.
+ *
  * IMPORTANT: this action must be applied BEFORE any actions that apply discounts at the order level.
  */
 class PercentDiscountOnCheapestItem implements Action

@@ -7,15 +7,15 @@
         "since": "2015-01-15",
         "revenue": "1505.95"
     },
-    "items": {
-        "0": {
+    "items": [
+        {
             "product-id": "A100",
             "quantity": "2",
             "unit-price": "9.75",
             "total": "19.50",
             "product": null
         },
-        "1": {
+        {
             "product-id": "B101",
             "quantity": "5",
             "unit-price": "4.99",
@@ -27,33 +27,7 @@
                 "price": "4.99"
             }
         },
-        "3": {
-            "product-id": "A102",
-            "quantity": "1",
-            "unit-price": "49.50",
-            "total": "49.50",
-            "product": {
-                "id": "A102",
-                "description": "Electric screwdriver",
-                "category": "1",
-                "price": "49.50"
-            }
-        },
-        "4": {
-            "product-id": "A103",
-            "quantity": "3",
-            "unit-price": "33.33",
-            "total": "99.99",
-            "product": null
-        },
-        "5": {
-            "product-id": "A104",
-            "quantity": "5",
-            "unit-price": "50.00",
-            "total": "250.00",
-            "product": null
-        },
-        "6": {
+        {
             "product-id": "B102",
             "quantity": "4",
             "unit-price": "4.99",
@@ -65,9 +39,39 @@
                 "price": "4.99"
             },
             "discounts": [
-                "3.04"
+                {
+                    "description": "15.23% discount on cheapest item in filtered set",
+                    "filter": "product.category==2",
+                    "discounted_amount": "3.04"
+                }
             ]
+        },
+        {
+            "product-id": "A102",
+            "quantity": "1",
+            "unit-price": "49.50",
+            "total": "49.50",
+            "product": {
+                "id": "A102",
+                "description": "Electric screwdriver",
+                "category": "1",
+                "price": "49.50"
+            }
+        },
+        {
+            "product-id": "A103",
+            "quantity": "3",
+            "unit-price": "33.33",
+            "total": "99.99",
+            "product": null
+        },
+        {
+            "product-id": "A104",
+            "quantity": "5",
+            "unit-price": "50.00",
+            "total": "250.00",
+            "product": null
         }
-    },
+    ],
     "total": "460.86"
 }

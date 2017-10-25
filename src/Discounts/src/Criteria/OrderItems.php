@@ -6,7 +6,7 @@ use Webmozart\Expression\Expression;
 use Webmozart\Expression\Selector\Key;
 
 /**
- * Selects the items in an order 
+ * Selects the items in an order
  */
 class OrderItems extends Key
 {

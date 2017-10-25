@@ -79,7 +79,6 @@ class GrantAction implements MiddlewareInterface
             $json = $this->discounts->grantOnOrder($order);
 
             return new JsonResponse($json);
-
         } catch (GuzzleException $e) {
             // TODO: log it somewhere (e.g. Monolog)
             throw new \RuntimeException('Could not communicate with the Products API', 500, $e);
@@ -98,12 +97,12 @@ class GrantAction implements MiddlewareInterface
     private function loadProductDataForOrderItems(array $items): array
     {
         $idsToProcess = \array_map(
-            function(array $item) {
+            function (array $item) {
                 Assert::keyExists($item, 'product-id');
                 Assert::stringNotEmpty($item['product-id']);
                 return $item['product-id'];
             },
-            \array_filter($items, function(array $item) {
+            \array_filter($items, function (array $item) {
                 return empty($item['product']);
             })
         );

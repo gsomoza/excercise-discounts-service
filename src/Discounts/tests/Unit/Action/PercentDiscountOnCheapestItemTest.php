@@ -41,5 +41,4 @@ class PercentDiscountOnCheapestItemTest extends TestCase
 
         $this->assertMatchesJsonSnapshot(\json_encode($result));
     }
-
 }

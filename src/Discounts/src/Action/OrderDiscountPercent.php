@@ -30,7 +30,7 @@ class OrderDiscountPercent implements Action
     {
         $oldTotal = \floatval($order['total']);
         $newTotal = $this->discount->off($oldTotal);
-        
+
         $order['total'] = \number_format($newTotal, 2);
 
         return $order;

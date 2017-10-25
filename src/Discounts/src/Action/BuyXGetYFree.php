@@ -44,14 +44,14 @@ class BuyXGetYFree implements Action
     {
         $toProcess = Expr::filter($order['items'], $this->filterCriteria);
         foreach ($toProcess as $item) {
-           $qty = $item['quantity'];
-           $toAdd = \floor($qty / $this->threshold) * $this->qtyFree;
-           if ($toAdd > 0) {
-               $unitPrice = \floatval($item['unit-price']);
-               // make sure we don't grant a negative discount (that's a charge!)
-               $discount = \max($unitPrice, 0) * $toAdd;
+            $qty = $item['quantity'];
+            $toAdd = \floor($qty / $this->threshold) * $this->qtyFree;
+            if ($toAdd > 0) {
+                $unitPrice = \floatval($item['unit-price']);
+                // make sure we don't grant a negative discount (that's a charge!)
+                $discount = \max($unitPrice, 0) * $toAdd;
 
-               $order['items'][] = [ // new line items with the free products
+                $order['items'][] = [ // new line items with the free products
                    'product-id' => $item['product-id'],
                    'quantity' => "$toAdd",
                    'unit-price' => \number_format($unitPrice, 2),
@@ -62,8 +62,8 @@ class BuyXGetYFree implements Action
                            ['discounted_amount' => \number_format($discount, 2)]
                        ),
                    ],
-               ];
-           }
+                ];
+            }
         }
 
         return $order;

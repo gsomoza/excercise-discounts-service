@@ -17,6 +17,7 @@
     "php": "^7.1",
     "guzzlehttp/guzzle": "^6.3",
     "http-interop/http-middleware": "^0.4.1",
+    "phpro/grumphp": "^0.12.0",
     "roave/security-advisories": "dev-master",
     "spatie/phpunit-snapshot-assertions": "^1.1",
     "teamleader/sales-discount": "^1.0",
@@ -67,7 +68,7 @@
     "cs-check": "phpcs",
     "cs-fix": "phpcbf",
     "serve": "php -S 0.0.0.0:8080 -t public public/index.php",
-    "test": "phpunit --colors=always",
+    "test": "phpunit --colors=always && phpunit -c src/Discounts/phpunit.xml.dist",
     "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
     "upload-coverage": "coveralls -v"
   }

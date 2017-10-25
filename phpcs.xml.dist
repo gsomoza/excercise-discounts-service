@@ -17,4 +17,6 @@
 
     <!-- Paths to check -->
     <file>src</file>
+    <exclude-pattern>src/Discounts/vendor/*</exclude-pattern>
+    <exclude-pattern>*/tests/*</exclude-pattern>
 </ruleset>
