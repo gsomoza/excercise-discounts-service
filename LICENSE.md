@@ -1,3 +1,5 @@
+Copyright (c) 2017, Gabriel Somoza
+
 Copyright (c) 2015-2017, Zend Technologies USA, Inc.
 All rights reserved.
 
